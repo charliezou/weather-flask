@@ -6,14 +6,26 @@ import requests
 import dashscope
 #from dashscope.audio.tts import SpeechSynthesizer
 
+import time, logging
+from flask import g
+
+
+
 # 使用语音合成新接口以支持最新模型
 from dashscope import MultiModalConversation
 
+
+from dotenv import load_dotenv
+# 默认先找 .env，找不到再找 .env.local（可指定）
+load_dotenv('.env.local')
+
 app = Flask(__name__)
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s | %(message)s')
 CORS(app)  # 解决跨域问题
 
 # --- 配置区 ---
-DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "")
+DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY")
 dashscope.api_key = DASHSCOPE_API_KEY
 
 CACHE_DIR = "audio_cache"
@@ -22,6 +34,18 @@ if not os.path.exists(CACHE_DIR):
 
 # Qwen Chat API 地址
 QWEN_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+
+@app.before_request
+def _start():
+    g._req_start = time.time()
+
+@app.after_request
+def _log(response):
+    cost = (time.time() - g._req_start) * 1000          # ms
+    logging.info(f"{request.method} {request.path} "
+                 f"{response.status_code} {cost:.2f}ms")
+    return response
+
 
 # --- 路由 1: 故事生成 ---
 @app.route('/api/story', methods=['POST'])
