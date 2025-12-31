@@ -68,7 +68,8 @@ def generate_story():
                 "content": f"基于以下动物行为创作故事：{animal_details}"
             }
         ],
-        "temperature": 0.8
+        "temperature": 0.7,
+        "top_p": 0.8
     }
 
     headers = {
