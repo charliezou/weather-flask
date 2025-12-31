@@ -7,6 +7,6 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
-    host: 'localhost', // 或者使用 '0.0.0.0' 来监听所有地址
+    host: '0.0.0.0', // 或者使用 '0.0.0.0' 来监听所有地址
   },
 })

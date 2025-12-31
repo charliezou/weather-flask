@@ -180,7 +180,7 @@ const useAudioAndSpeech = (isMuted: boolean) => {
 
     // 2. 播放语音的调用
     const handlePlayAudio = async (text: string) => {
-        const response = await fetch('http://localhost:5000/api/tts', {
+        const response = await fetch('http://192.168.1.103:5000/api/tts', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text }),
@@ -206,7 +206,7 @@ const useAudioAndSpeech = (isMuted: boolean) => {
                         currentAudio.current = new Audio(url);
                         await currentAudio.current.play();
                         currentAudio.current.onended = () => setIsSpeaking(false);  
-                            return; // Success
+                        return; // Success
                     } else{
                         const err = await response.json();
                         console.error(`TTS API request failed: ${response.status} - ${err.error}`);
@@ -390,7 +390,7 @@ const WeatherApp = () => {
 
     // 1. 生成故事的调用
     const handleGenerateStory = async (details: string) => {
-        const response = await fetch('http://localhost:5000/api/story', {
+        const response = await fetch('http://192.168.1.103:5000/api/story', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ animalDetails: details }),

@@ -20,9 +20,10 @@ from dotenv import load_dotenv
 load_dotenv('.env.local')
 
 app = Flask(__name__)
+CORS(app)  # 解决跨域问题
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s | %(message)s')
-CORS(app)  # 解决跨域问题
+
 
 # --- 配置区 ---
 DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY")
